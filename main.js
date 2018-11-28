@@ -14,7 +14,7 @@ function start() {
 
     
 
-    d3.csv('colleges.csv', function(d){
+    d3.csv('movies.csv', function(d){
         console.log(d);
     });
 }    
