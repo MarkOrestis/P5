@@ -4,8 +4,8 @@ function start() {
 
     var graph = document.getElementById('graph');
 
-    var width = 700;
-    var height = 800;
+    var width = 1000;
+    var height = 1500;
 
     
 
@@ -56,8 +56,8 @@ function start() {
         .domain([0, 10])
         .range([0, width/1.19]);
 
-    var y = d3.scaleTime()
-        .domain([new Date(2010, 1, 1), new Date(2016, 1, 1)])
+    var y = d3.scaleLinear()
+        .domain([0, 650000000])
         .range([height, 0]);
 
     var xAxis = d3.axisBottom(x)
@@ -65,7 +65,8 @@ function start() {
         
 
     var yAxis = d3.axisRight(y)
-        .tickSize(width);
+        .ticks(40)
+        .tickSize(height);
         // .tickFormat(function(d) {
         //   var s = formatNumber(d / 1e6);
         //   return this.parentNode.nextSibling
@@ -74,7 +75,7 @@ function start() {
         // });
 
     g.append("g")
-        .attr("transform", "translate(30," + height/1.19 + ")")
+        .attr("transform", "translate(50," + height + ")")
         .call(customXAxis);
 
     g.append("g")
