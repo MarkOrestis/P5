@@ -99,7 +99,7 @@ function start() {
 
     var yAxis = d3.axisRight(y)
         .ticks(40)
-        .tickSize(height);
+        .tickSize(width);
         // .tickFormat(function(d) {
         //   var s = formatNumber(d / 1e6);
         //   return this.parentNode.nextSibling
