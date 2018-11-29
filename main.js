@@ -31,6 +31,26 @@ function start() {
 
     // var circles = svg.append('g');
 
+    //brushing
+    var brush = d3.brush()
+            .extent([[0, 0], [width, height]]);
+    brush
+        .on("start", brushstart)   // when mousedown&dragging starts 
+        .on("brush", brushing)          // when dragging
+        .on("end", brushend);      // when mouseu
+    function brushstart() {
+     
+    }
+    function brushing() {
+  
+    }		
+    
+    function brushend() {
+    }
+    svg.append("g")
+        .attr("class", "brush")
+        .call(brush);
+
     d3.csv('movies.csv', d => {
         //to make budget a number
         d.budget = +d.budget;
