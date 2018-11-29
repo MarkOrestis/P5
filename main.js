@@ -7,7 +7,7 @@ function start() {
     var width = 1000;
     var height = 1500;
     var r = d3.scaleLinear().domain([0, 10]).range([0, 7]);
-    var c = d3.scaleOrdinal(d3.schemeCategory10).domain(["Australia", "Bahamas", "Belgium", "Brazil", "Bulgaria", "Cambodia", "Canada", "Chile", "China", 
+    var c = d3.scaleOrdinal(d3.schemeCategory20).domain(["Australia", "Bahamas", "Belgium", "Brazil", "Bulgaria", "Cambodia", "Canada", "Chile", "China", 
     "Czech Republic", "Denmark", "Egypt", "Finland", "France", "Georgia", "Germany", "Greece", "Hong Kong",
     "Hungary", "Iceland", "India", "Indonesia", "Iran", "Ireland", 
     "Israel", "Italy", "Japan", "Kenya", "Kyrgyzstan", "Mexico", "New Zealand",
@@ -18,16 +18,15 @@ function start() {
         .append('svg')
         .attr('width', width)
         .attr('height', height/2),
-        margin = {top: 20, right: 0, bottom: 20, left: 0},
+        margin = {top: 30, right: 0, bottom: 50, left: 30},
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom;
-        var y = d3.scaleTime()
-            .domain([new Date(2010), new Date(2016)])
-            .range([0, width]);
-        var x = d3.scaleLinear()
-            .domain([0, 10])
-            .range([height, 0]);    
-
+    var y = d3.scaleTime()
+        .domain([new Date(2010), new Date(2016)])
+        .range([0, width]);
+    var x = d3.scaleLinear()
+        .domain([0, 10])
+        .range([height, 0]);    
 
 
     // var circles = svg.append('g');
@@ -36,8 +35,27 @@ function start() {
         //to make budget a number
         d.budget = +d.budget;
         return d;
-        
     }, (error, data) => {
+        var nest = d3.nest()
+            .key(function(d){
+                return d.movie_title;
+            })
+            .key(function(d){
+                return d.title_year;
+            })
+            .entries(data)
+        svg
+            .append("select")
+            .selectAll("option")
+            .data(nest)
+            .enter()
+            .append("option")
+            .attr("value", function(d){
+                return d.key;
+            })
+            .text(function(d){
+                return d.key;
+        })
         svg.selectAll("circle").data(data).enter().append("circle")
         .attr("cx", function(d) {
           return x(0);
@@ -57,7 +75,7 @@ function start() {
           })
         svg.selectAll("circle").transition().duration(1000)
           .attr("cx", function(d) {
-            return x(+d.imdb_score);
+            return x(+d.imdb_score + (margin.left/100));
           })
           .attr("cy", function(d) {
             return y(+d.budget);
@@ -73,16 +91,17 @@ function start() {
                     return {
                         title: s.movie_title,
                         budget: s.budget,
-                        country: s.country
+                        country: s.country,
+                        year: s.title_year
                     }
                 });
             })
             .entries(data);
-
-        console.log(imdbScore);
     });
+
+
     
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + (margin.top + 20) + ")");
     var formatNumber = d3.format(".1f");
 
     var x = d3.scaleLinear()
@@ -90,7 +109,7 @@ function start() {
         .range([0, width/1.19]);
 
     var y = d3.scaleLinear()
-        .domain([0, 300000000])
+        .domain([0, 280000000])
         .range([height, 0]);
 
     var xAxis = d3.axisBottom(x)
@@ -98,7 +117,7 @@ function start() {
         
 
     var yAxis = d3.axisRight(y)
-        .ticks(40)
+        .ticks(10)
         .tickSize(width);
         // .tickFormat(function(d) {
         //   var s = formatNumber(d / 1e6);
@@ -108,10 +127,11 @@ function start() {
         // });
 
     g.append("g")
-        .attr("transform", "translate(50," + height + ")")
+        .attr("transform", "translate(0," + (height-margin.bottom) + ")")
         .call(customXAxis);
 
     g.append("g")
+        .attr("transform", "translate(0," + -margin.bottom + ")")
         .call(customYAxis);
 
     function customXAxis(g) {
