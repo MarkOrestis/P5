@@ -101,7 +101,7 @@ function start() {
 
 
     
-    g = svg.append("g").attr("transform", "translate(" + margin.left + "," + (margin.top + 20) + ")");
+    g = svg.append("g").attr("transform", "translate(" + (margin.left - 6) + "," + (margin.top + 20) + ")");
     var formatNumber = d3.format(".1f");
 
     var x = d3.scaleLinear()
