@@ -44,3 +44,11 @@ body {
 .select2 {
     fill: blue !important;
 }
+#chart3 {
+    /* align-content: right;
+    text-align: right;  */
+}
+#labels {
+    /* align-content: center;
+    text-align: center; */
+}

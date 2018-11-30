@@ -23,12 +23,12 @@ function start() {
         margin = { top: 30, right: 0, bottom: 50, left: 30 },
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom;
-    var y = d3.scaleTime()
-        .domain([new Date(2010), new Date(2016)])
-        .range([0, width]);
-    var x = d3.scaleLinear()
-        .domain([0, 10])
-        .range([height, 0]);
+    // var y = d3.scaleTime()
+    //     .domain([new Date(2010), new Date(2016)])
+    //     .range([0, width]);
+    // var x = d3.scaleLinear()
+    //     .domain([0, 10])
+    //     .range([height, 0]);
 
     // var dropboxData = [2010, 2011, 2012, 2013, 2014, 2015, 2016];
 
@@ -104,47 +104,6 @@ function start() {
             })
             .style('opacity', 0);
     };
-
-    //Brushing -------------------------------
-    var brushY = d3.scaleLinear().range([30, width]);
-    var brushX = d3.scaleLinear().range([0, height]);
-    var brush = d3.brush()
-        .extent([[0, 0], [width, height]]);
-    var e = brush.extent();
-
-
-    brush
-        .on("start", brushstart)   // when mousedown&dragging starts
-        .on("brush", brushing)          // when dragging
-        .on("end", brushend);      // when mouseu
-    function brushstart() {
-
-    }
-
-
-    function brushing() {
-        svg.selectAll('circle').classed("selected", function(d, i) {
-
-        });
-    }
-
-
-    function brushend() {
-        var s = d3.event.selection;
-        if (!s) {
-
-        } else {
-            console.log(s[0][0]);
-        }
-        svg.selectAll('circle').classed("selected", function(d, i) {
-
-        });
-    }
-
-    svg.append("g")
-        .attr("class", "brush")
-        .call(brush);
-
     d3.csv('movies.csv', d => {
 
 
@@ -183,16 +142,17 @@ function start() {
             })
             .style("fill", function (d) {
                 // console.log(d.country);
-                if (d.movie_facebook_likes < 1000)
-                return "#10485F";
-                if (d.movie_facebook_likes < 10000 && d.movie_facebook_likes > 1000)
-                return "#003385";
-                if (d.movie_facebook_likes < 100000 && d.movie_facebook_likes > 10000)
-                return "#0022F6";
-                if (d.movie_facebook_likes < 1000000 && d.movie_facebook_likes > 100000)
+                if (d.movie_facebook_likes <= 1000)
+                return "#39CCCC";
+                if (d.movie_facebook_likes <= 10000 && d.movie_facebook_likes >= 1000)
+                return "#7FDBFF";
+                if (d.movie_facebook_likes <= 100000 && d.movie_facebook_likes >= 10000)
+                return "#0074D9";
+                if (d.movie_facebook_likes <= 1000000 && d.movie_facebook_likes >= 100000)
                 return "#0000FF";
                 // return c(d.country);
             })
+            .attr("transform", "translate(0," + "50" + ")")
             .append("title")
             .text(function (d) {
                 return d.movie_title;
@@ -252,12 +212,12 @@ function start() {
 
     g.append("g")
         .attr("class", "axis axis--x")
-        .attr("transform", "translate(0," + (height - margin.bottom) + ")")
+        .attr("transform", "translate(0," + (height) + ")")
         .call(customXAxis);
 
     g.append("g")
         .attr("class", "axis axis--y")
-        .attr("transform", "translate(0," + -margin.bottom + ")")
+        .attr("transform", "translate(-20," + "0" + ")")
         .call(customYAxis);
 
     function customXAxis(g) {
@@ -273,7 +233,9 @@ function start() {
     }
     //Brushing -------------------------------
     var brush = d3.brush()
-        .extent([[0, 0], [width, height]]);
+        .extent([[0, 0], [width, height + 50]]),
+        idleTimeout,
+        idleDelay = 350;
     var e = brush.extent();
     var brushX = d3.scaleLinear().range([0, width]);
     var brushY = d3.scaleLinear().range([0, height]);
@@ -281,7 +243,8 @@ function start() {
     brush
         .on("start", brushstart)   // when mousedown&dragging starts
         .on("brush", brushing)          // when dragging
-        .on("end", brushend);      // when mouseu
+        .on("end", brushend);      // when mouseup
+        
     function brushstart() {
 
     }
@@ -292,14 +255,21 @@ function start() {
 
         });
     }
-
-
+    function idled() {
+        idleTimeout = null;
+      }
+    var x0 = [0, 10];
+    var y0 = [0, 280000000];
     function brushend() {
         var s = d3.event.selection;
         if (!s) {
-
+            console.log(s);
+            // console.log(s);
+            if (!idleTimeout) return idleTimeout = setTimeout(idled, idleDelay);
+            x.domain(x0);
+            y.domain(y0);
         } else {
-
+            console.log(s);
             x.domain([s[0][0], s[1][0]].map(x.invert, x));
             y.domain([s[1][1], s[0][1]].map(y.invert, y));
             svg.select(".brush").call(brush.move, null);
@@ -332,11 +302,18 @@ function start() {
         });
     //         .attr("cx", function(d) { return x(d[0]); })
     //         .attr("cy", function(d) { return y(d[1]); });
-      }
+      
+    }
 
     svg.append("g")
         .attr("class", "brush")
         .attr("transform", "translate(" + (margin.left - 6) + ",0" + ")")
         .call(brush);
+
+
+    // Keys & Labels
+    var info = d3.select("#chart3");
+    info.selectAll()
+        .attr("transform", "translate(50, 5000)")
 
 }
