@@ -68,7 +68,7 @@ function start() {
 
         svg.selectAll('circle')
             .filter(function(d) {
-                return d.title_year == selectValue;
+                return d.title_year != selectValue;
             })
             .transition()
             .duration(function(d) {
