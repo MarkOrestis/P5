@@ -1,0 +1,12 @@
+#filter {
+    transform: translateX(20px);
+}
+
+#filter button {
+    margin: 5px;
+}
+
+#filter select {
+    margin-right: 5px;
+}
+

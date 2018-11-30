@@ -3,6 +3,7 @@ window.onload = start;
 function start() {
 
     var graph = document.getElementById('graph');
+    var filter = document.getElementById('filter');
 
     var width = 1000;
     var height = 1500;
@@ -29,9 +30,8 @@ function start() {
         .range([height, 0]);
 
     var dropboxData = [2010, 2011, 2012, 2013, 2014, 2015, 2016];
-    var hallo = ["yo"];
-    var select = d3.select(graph)
-        .append('p')
+    var select = d3.select(filter)
+        .append('span')
         .append('select')
         .attr('class', 'select');
 
@@ -40,14 +40,14 @@ function start() {
         .append('option')
         .text(function (d) { return d; })
 
-    d3.select(graph)
-        .append('p')
+    d3.select(filter)
+        .append('span')
         .append('button')
         .text('Filter Data')
         .on('click', onFilter);
 
-    d3.select(graph)
-        .append('p')
+    d3.select(filter)
+        .append('span')
         .append('button')
         .text('Reset Filter')
         .on('click', function() {
@@ -60,7 +60,7 @@ function start() {
         });
 
     function onFilter() {
-        selectValue = d3.select(graph).select('p').select('select').property('value')
+        selectValue = d3.select(filter).select('span').select('select').property('value')
         svg.selectAll('circle')
             .transition()
             .duration(1000)
