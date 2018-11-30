@@ -48,7 +48,19 @@ body {
     /* align-content: right;
     text-align: right;  */
 }
-#labels {
-    /* align-content: center;
-    text-align: center; */
+#label {
+    text-align: right;
+    align-content: right;
+}
+.less1000 {
+background: #39cccc
+}
+.less10000 {
+background: #7FDBFF
+}
+.less1000000 {
+background: #0074D9
+}
+.less1000000 {
+background: #0000FF
 }
