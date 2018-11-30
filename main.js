@@ -79,55 +79,7 @@ function start() {
             .style('opacity', 0);
     };
 
-    //Brushing -------------------------------
-    var brushY = d3.scaleLinear().range([30, width]);
-    var brushX = d3.scaleLinear().range([0, height]);
-    var brush = d3.brush()
-        .extent([[0, 0], [width, height]]);
-    var e = brush.extent();
-
-
-    brush
-        .on("start", brushstart)   // when mousedown&dragging starts
-        .on("brush", brushing)          // when dragging
-        .on("end", brushend);      // when mouseu
-    function brushstart() {
-
-    }
-
-
-    function brushing() {
-        svg.selectAll('circle').classed("selected", function(d, i) {
-
-        });
-    }
-
-
-    function brushend() {
-        var s = d3.event.selection;
-        if (!s) {
-
-        } else {
-            console.log(s[0][0]);
-        }
-        svg.selectAll('circle').classed("selected", function(d, i) {
-
-        });
-    }
-
-
-    svg.append("g")
-        .attr("class", "brush")
-        .call(brush);
-
-
-
-
-
-
-
-
-
+    
 
 
 
@@ -223,4 +175,57 @@ function start() {
         g.selectAll(".tick:not(:first-of-type) line").attr("stroke", "#777").attr("stroke-dasharray", "2,2");
         g.selectAll(".tick text").attr("x", 4).attr("dy", -4);
     }
+    //Brushing -------------------------------
+    var brushY = d3.scaleLinear().range([0, width]);
+    var brushX = d3.scaleLinear().range([0, height]);
+    var brush = d3.brush()
+        .extent([[0, 0], [width, height]]);
+    var e = brush.extent();
+
+
+    brush
+        .on("start", brushstart)   // when mousedown&dragging starts
+        .on("brush", brushing)          // when dragging
+        .on("end", brushend);      // when mouseu
+    function brushstart() {
+
+    }
+
+
+    function brushing() {
+        svg.selectAll('circle').classed("selected", function(d, i) {
+
+        });
+    }
+
+
+    function brushend() {
+        var s = d3.event.selection;
+        if (!s) {
+
+        } else {
+            x.domain([s[0][0], s[1][0]].map(x.invert, x));
+            y.domain([s[1][1], s[0][1]].map(y.invert, y));
+            svg.select(".brush").call(brush.move, null);
+        }
+        svg.selectAll('circle').classed("selected", function(d, i) {
+
+        });
+        zoom();
+    }
+    function zoom() {
+        console.log("zooming");
+        var t = svg.transition().duration(750);
+        svg.select(".axis--x").transition(t).call(xAxis);
+        svg.select(".axis--y").transition(t).call(yAxis);
+    //     svg.selectAll("circle").transition(t)
+    //         .attr("cx", function(d) { return x(d[0]); })
+    //         .attr("cy", function(d) { return y(d[1]); });
+      }
+
+    svg.append("g")
+        .attr("class", "brush")
+        .attr("transform", "translate(" + (margin.left - 6) + "," + (margin.top + 20) + ")")
+        .call(brush);
+
 }
