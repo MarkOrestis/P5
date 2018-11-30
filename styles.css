@@ -1,6 +1,10 @@
 #filter {
     /* transform: translateX(20px); */
+    /* text-align: center; */
     text-align: center;
+}
+#filter input {
+    margin-right: 5px;
 }
 
 #filter button {
@@ -30,4 +34,13 @@
 
 body {
     margin: 0px;
+}
+
+
+.select1 {
+    fill: black !important;
+}
+
+.select2 {
+    fill: blue !important;
 }
