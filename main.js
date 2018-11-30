@@ -5,8 +5,8 @@ function start() {
     var filter = document.getElementById('filter');
 
 
-    var width = 1000;
-    var height = 1500;
+    var width = 1050;
+    var height = 1550;
     var r = d3.scaleLinear().domain([0, 10]).range([0, 7]);
     var c = d3.scaleLinear(d3.schemeCategory20c).domain([0, 300000]);//.range([0, 20]);//.range([0,4]);
     // (["Australia", "Bahamas", "Belgium", "Brazil", "Bulgaria", "Cambodia", "Canada", "Chile", "China",
@@ -23,6 +23,52 @@ function start() {
         margin = { top: 30, right: 0, bottom: 50, left: 30 },
         width = +svg.attr("width") - margin.left - margin.right,
         height = +svg.attr("height") - margin.top - margin.bottom;
+    //Right Side SVG
+    var svg2 = d3.select(graph)
+        .append('svg')
+        .attr('width', 200)
+        .attr('height', height);
+    //Chart Legend
+    svg2.append("rect")
+        .attr("width", 150)
+        .attr("height", 150)
+        .attr("fill", "transparent")
+        .attr("stroke", "gray")
+        .attr("transform", "translate(20, 0)");
+    svg2.append("text")
+        .text("Facebook Likes")
+        .attr("transform", "translate (40, 20)");
+    svg2.append("circle")
+        .attr("r", 10)
+        .attr("fill", "#0000FF")
+        .attr("transform", "translate(50, 50)");
+    svg2.append("text")
+        .text(">100000")
+        .attr("transform", "translate(70, 55)");
+    svg2.append("circle")
+        .attr("r", 10)
+        .attr("fill", "#0074D9")
+        .attr("transform", "translate(50, 75)");
+    svg2.append("text")
+        .text(">10000")
+        .attr("transform", "translate(70, 80)");
+    svg2.append("circle")
+        .attr("r", 10)
+        .attr("fill", "#7FDBFF")
+        .attr("transform", "translate(50, 100)");
+    svg2.append("text")
+        .text(">1000")
+        .attr("transform", "translate(70, 105)");
+    svg2.append("circle")
+        .attr("r", 10)
+        .attr("fill", "#39CCCC")
+        .attr("transform", "translate(50, 125)");
+    svg2.append("text")
+        .text(">100")
+        .attr("transform", "translate(70, 130)");
+    
+        
+        
     // var y = d3.scaleTime()
     //     .domain([new Date(2010), new Date(2016)])
     //     .range([0, width]);
@@ -311,9 +357,7 @@ function start() {
         .call(brush);
 
 
-    // Keys & Labels
-    var info = d3.select("#chart3");
-    info.selectAll()
-        .attr("transform", "translate(50, 5000)")
+    //Legend
+    
 
 }
