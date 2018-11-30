@@ -1,9 +1,9 @@
 window.onload = start;
-
 function start() {
 
     var graph = document.getElementById('graph');
     var filter = document.getElementById('filter');
+
 
     var width = 1000;
     var height = 1500;
@@ -30,18 +30,15 @@ function start() {
         .domain([0, 10])
         .range([height, 0]);
 
-    var dropboxData = [2010, 2011, 2012, 2013, 2014, 2015, 2016];
-    var select = d3.select(graph)
-        .append('p')
-    var select = d3.select(filter)
-        .append('span')
-        .append('select')
-        .attr('class', 'select');
+    // var dropboxData = [2010, 2011, 2012, 2013, 2014, 2015, 2016];
 
-    select.selectAll('option')
-        .data(dropboxData).enter()
-        .append('option')
-        .text(function (d) { return d; })
+    d3.select(filter)
+        .append('span')
+        .append('input')
+        .attr('class','search-box')
+        .attr('placeholder', 'search movie title')
+        .attr('type', 'text')
+        .attr('name', 'textInput')
 
     d3.select(filter)
         .append('span')
@@ -49,11 +46,15 @@ function start() {
         .text('Filter Data')
         .on('click', onFilter);
 
+
+
+
     d3.select(filter)
         .append('span')
         .append('button')
         .text('Reset Filter')
         .on('click', function() {
+            console.log(svg.selectAll("input[name='mode']:checked"));
             svg.selectAll('circle')
                 .transition()
                 .duration(function(d) {
@@ -62,8 +63,30 @@ function start() {
                 .style('opacity', 1);
         });
 
+    d3.selectAll("input[name='mode']").on('change', function(d) {
+        var valueRadioButton = this.value;
+        console.log(valueRadioButton);
+        svg.selectAll('circle')
+        .transition()
+        .duration(1000)
+        .style('opacity', 1);
+
+        svg.selectAll('circle')
+            .filter(function(d) {
+                if (valueRadioButton == 2009) {
+                    return d.title_year == valueRadioButton;
+                }
+                return d.title_year != valueRadioButton
+            })
+            .transition()
+            .duration(function(d) {
+                return Math.random() * 1000;
+            })
+            .style('opacity', 0);
+    });
+
     function onFilter() {
-        selectValue = d3.select(filter).select('span').select('select').property('value')
+        searchValue = d3.select('#filter').select('span').select('input').property('value');
         svg.selectAll('circle')
             .transition()
             .duration(1000)
@@ -71,7 +94,9 @@ function start() {
 
         svg.selectAll('circle')
             .filter(function(d) {
-                return d.title_year != selectValue;
+                if (!(d.movie_title.toLowerCase().includes(searchValue.toLowerCase()))) {
+                    return d.movie_title;
+                }
             })
             .transition()
             .duration(function(d) {
@@ -80,13 +105,49 @@ function start() {
             .style('opacity', 0);
     };
 
-    
+    //Brushing -------------------------------
+    var brushY = d3.scaleLinear().range([30, width]);
+    var brushX = d3.scaleLinear().range([0, height]);
+    var brush = d3.brush()
+        .extent([[0, 0], [width, height]]);
+    var e = brush.extent();
 
 
+    brush
+        .on("start", brushstart)   // when mousedown&dragging starts
+        .on("brush", brushing)          // when dragging
+        .on("end", brushend);      // when mouseu
+    function brushstart() {
+
+    }
+
+
+    function brushing() {
+        svg.selectAll('circle').classed("selected", function(d, i) {
+
+        });
+    }
+
+
+    function brushend() {
+        var s = d3.event.selection;
+        if (!s) {
+
+        } else {
+            console.log(s[0][0]);
+        }
+        svg.selectAll('circle').classed("selected", function(d, i) {
+
+        });
+    }
+
+    svg.append("g")
+        .attr("class", "brush")
+        .call(brush);
 
     d3.csv('movies.csv', d => {
 
-    
+
         //to make budget a number
         d.budget = +d.budget;
         return d;
@@ -110,6 +171,7 @@ function start() {
             })
 
         svg.selectAll("circle").data(data).enter().append("circle")
+            .attr("id", function (d, i) { return i; })
             .attr("cx", function (d) {
                 return x(0);
             })
@@ -135,6 +197,8 @@ function start() {
             .text(function (d) {
                 return d.movie_title;
             })
+
+        var clicked = 0;
         svg.selectAll("circle").transition().duration(1000)
             .attr("cx", function (d) {
                 return x(+d.imdb_score + (margin.left / 100));
@@ -144,7 +208,25 @@ function start() {
             })
             .attr("r", function (d) {
                 return r(5);
+            }).on("end", (d,i) => {
+                if (i == 1604) {
+                    svg.selectAll("circle").on("click", (d, i) => {
+                        clicked++;
+                        if (clicked == 1) {
+                            svg.select("[id='" + i + "']").attr("class", "select1");
+                        }
+                        else if (clicked == 2) {
+                            svg.select("[id='" + i + "']").attr("class", "select2");
+                        }
+                        else {
+                            clicked = 0;
+                            //reset color of circles
+                        }
+                    })
+                }
+
             })
+
     });
 
 
@@ -217,16 +299,16 @@ function start() {
         if (!s) {
 
         } else {
-            
+
             x.domain([s[0][0], s[1][0]].map(x.invert, x));
             y.domain([s[1][1], s[0][1]].map(y.invert, y));
             svg.select(".brush").call(brush.move, null);
         }
         svg.selectAll("circle").classed("selected", function(d, i)
-        { 
-            
+        {
+
             if (s) {
-                
+
                 // console.log(y.invert(s[0][1]));
                 // return !(x.invert(s[0][0] - 500) <= d.imdb_score
                 // && x.invert(s[1][0] + 500) >= d.imdb_score
