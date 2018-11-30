@@ -15,6 +15,10 @@
     background:  #0099CC;
     color: white;
 }
+#filter button:focus {
+    outline:0;
+}
+
 
 #filter select {
     margin-right: 5px;
