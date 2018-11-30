@@ -157,10 +157,12 @@ function start() {
         .tickSize(width);
 
     g.append("g")
+        .attr("class", "axis axis--x")
         .attr("transform", "translate(0," + (height - margin.bottom) + ")")
         .call(customXAxis);
 
     g.append("g")
+        .attr("class", "axis axis--y")
         .attr("transform", "translate(0," + -margin.bottom + ")")
         .call(customYAxis);
 
@@ -209,23 +211,29 @@ function start() {
             svg.select(".brush").call(brush.move, null);
         }
         svg.selectAll('circle').classed("selected", function(d, i) {
-
+            
         });
         zoom();
     }
     function zoom() {
         console.log("zooming");
         var t = svg.transition().duration(750);
-        svg.select(".axis--x").transition(t).call(xAxis);
-        svg.select(".axis--y").transition(t).call(yAxis);
-    //     svg.selectAll("circle").transition(t)
+        svg.select(".axis--x").transition(t).call(xAxis).call(customXAxis);
+        svg.select(".axis--y").transition(t).call(yAxis).call(customYAxis);
+        svg.selectAll("circle").transition(t)
+        .attr("cx", function (d) {
+            return x(+d.imdb_score + (margin.left / 100));
+        })
+        .attr("cy", function (d) {
+            return y(+d.budget);
+        });
     //         .attr("cx", function(d) { return x(d[0]); })
     //         .attr("cy", function(d) { return y(d[1]); });
       }
 
     svg.append("g")
         .attr("class", "brush")
-        .attr("transform", "translate(" + (margin.left - 6) + "," + (margin.top + 20) + ")")
+        .attr("transform", "translate(" + (margin.left - 6) + ",0" + ")")
         .call(brush);
 
 }
