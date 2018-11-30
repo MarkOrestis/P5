@@ -8,13 +8,14 @@ function start() {
     var width = 1000;
     var height = 1500;
     var r = d3.scaleLinear().domain([0, 10]).range([0, 7]);
-    var c = d3.scaleOrdinal(d3.schemeCategory20).domain(["Australia", "Bahamas", "Belgium", "Brazil", "Bulgaria", "Cambodia", "Canada", "Chile", "China",
-        "Czech Republic", "Denmark", "Egypt", "Finland", "France", "Georgia", "Germany", "Greece", "Hong Kong",
-        "Hungary", "Iceland", "India", "Indonesia", "Iran", "Ireland",
-        "Israel", "Italy", "Japan", "Kenya", "Kyrgyzstan", "Mexico", "New Zealand",
-        "Nigeeria", "Norway", "Official Site", "Pakistan", "Panama", "Poland",
-        "Romania", "Russia", "Slovenia", "South Africa", "Spain", "Sweden", "Switzerland",
-        "Taiwan", "Thailand", "UK", "USA"]);
+    var c = d3.scaleLinear(d3.schemeCategory20c).domain([0, 300000]);//.range([0, 20]);//.range([0,4]);
+    // (["Australia", "Bahamas", "Belgium", "Brazil", "Bulgaria", "Cambodia", "Canada", "Chile", "China",
+    //     "Czech Republic", "Denmark", "Egypt", "Finland", "France", "Georgia", "Germany", "Greece", "Hong Kong",
+    //     "Hungary", "Iceland", "India", "Indonesia", "Iran", "Ireland",
+    //     "Israel", "Italy", "Japan", "Kenya", "Kyrgyzstan", "Mexico", "New Zealand",
+    //     "Nigeeria", "Norway", "Official Site", "Pakistan", "Panama", "Poland",
+    //     "Romania", "Russia", "Slovenia", "South Africa", "Spain", "Sweden", "Switzerland",
+    //     "Taiwan", "Thailand", "UK", "USA"]);
     var svg = d3.select(graph)
         .append('svg')
         .attr('width', width)
@@ -84,6 +85,8 @@ function start() {
 
 
     d3.csv('movies.csv', d => {
+
+    
         //to make budget a number
         d.budget = +d.budget;
         return d;
@@ -117,7 +120,16 @@ function start() {
                 return r(0);
             })
             .style("fill", function (d) {
-                return c(d.country);
+                // console.log(d.country);
+                if (d.movie_facebook_likes < 1000)
+                return "#10485F";
+                if (d.movie_facebook_likes < 10000 && d.movie_facebook_likes > 1000)
+                return "#003385";
+                if (d.movie_facebook_likes < 100000 && d.movie_facebook_likes > 10000)
+                return "#0022F6";
+                if (d.movie_facebook_likes < 1000000 && d.movie_facebook_likes > 100000)
+                return "#0000FF";
+                // return c(d.country);
             })
             .append("title")
             .text(function (d) {
@@ -178,12 +190,11 @@ function start() {
         g.selectAll(".tick text").attr("x", 4).attr("dy", -4);
     }
     //Brushing -------------------------------
-    var brushY = d3.scaleLinear().range([0, width]);
-    var brushX = d3.scaleLinear().range([0, height]);
     var brush = d3.brush()
         .extent([[0, 0], [width, height]]);
     var e = brush.extent();
-
+    var brushX = d3.scaleLinear().range([0, width]);
+    var brushY = d3.scaleLinear().range([0, height]);
 
     brush
         .on("start", brushstart)   // when mousedown&dragging starts
@@ -206,12 +217,22 @@ function start() {
         if (!s) {
 
         } else {
+            
             x.domain([s[0][0], s[1][0]].map(x.invert, x));
             y.domain([s[1][1], s[0][1]].map(y.invert, y));
             svg.select(".brush").call(brush.move, null);
         }
-        svg.selectAll('circle').classed("selected", function(d, i) {
+        svg.selectAll("circle").classed("selected", function(d, i)
+        { 
             
+            if (s) {
+                
+                // console.log(y.invert(s[0][1]));
+                // return !(x.invert(s[0][0] - 500) <= d.imdb_score
+                // && x.invert(s[1][0] + 500) >= d.imdb_score
+                // && y.invert(s[0][1] + 420) <= d.budget);
+                // && y.invert(s[1][1]) >= d.budget;
+            }
         });
         zoom();
     }

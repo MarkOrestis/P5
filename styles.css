@@ -31,3 +31,7 @@
 body {
     margin: 0px;
 }
+.selected{
+    fill: black !important;
+    
+}
