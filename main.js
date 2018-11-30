@@ -67,6 +67,7 @@ function start() {
         .text(">100")
         .attr("transform", "translate(70, 130)");
     
+
         
         
     // var y = d3.scaleTime()
@@ -213,21 +214,11 @@ function start() {
                 return y(+d.budget);
             })
             .attr("r", function (d) {
-                return r(5);
+                return r(10);
             }).on("end", (d,i) => {
                 if (i == 1604) {
                     svg.selectAll("circle").on("click", (d, i) => {
-                        clicked++;
-                        if (clicked == 1) {
-                            svg.select("[id='" + i + "']").attr("class", "select1");
-                        }
-                        else if (clicked == 2) {
-                            svg.select("[id='" + i + "']").attr("class", "select2");
-                        }
-                        else {
-                            clicked = 0;
-                            //reset color of circles
-                        }
+                        barchart(d);
                     })
                 }
 
@@ -235,7 +226,34 @@ function start() {
 
     });
 
+    //Bottom 2nd Visual SVG
+    var bsvg = d3.select(barChart)
+        .append('svg')
+        .attr('width', width)
+        .attr('height', height / 2)
+        .attr("transform", "translate(-100,0)"),
+        bwidth = +bsvg.attr("width"),
+        bheight = +bsvg.attr("height");
+    
+    var xb = d3.scaleLinear().range([0, bwidth]);
+    var yb = d3.scaleBand().range([bheight, 0]);
+    
+    var bg = bsvg.append("g")
+        .attr("transform", "translate (" + 30 + "," + 30 + ")");
+    xb.domain([0, 260000]);
+    bg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(70," + (bheight - 47) + ")")
+        .call(d3.axisBottom(xb).ticks(15));
+    function barchart(d) {
+        
+        yb.domain([d.actor_1_name, d.actor_2_name, d.actor_3_name, d.director_name]);
+        bg.append("g")
+            .attr("class", "y axis")
+            .attr("transform", "translate(70," + "-30" + ")")
+            .call(d3.axisLeft(yb));
 
+    }
 
     g = svg.append("g").attr("transform", "translate(" + (margin.left - 6) + "," + (margin.top + 20) + ")");
     var formatNumber = d3.format(".1f");

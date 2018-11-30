@@ -32,6 +32,10 @@
     text-align: center;
 }
 
+#barChart {
+    text-align: center;
+}
+
 body {
     margin: 0px;
 }
@@ -63,4 +67,17 @@ background: #0074D9
 }
 .less1000000 {
 background: #0000FF
+}
+.bar {
+	fill: #6F257F;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #D4D8DA;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+.x path {
+    display: none;
 }
