@@ -3,6 +3,7 @@ window.onload = start;
 function start() {
 
     var graph = document.getElementById('graph');
+    var filter = document.getElementById('filter');
 
     var width = 1000;
     var height = 1500;
@@ -31,6 +32,8 @@ function start() {
     var dropboxData = [2010, 2011, 2012, 2013, 2014, 2015, 2016];
     var select = d3.select(graph)
         .append('p')
+    var select = d3.select(filter)
+        .append('span')
         .append('select')
         .attr('class', 'select');
 
@@ -39,14 +42,14 @@ function start() {
         .append('option')
         .text(function (d) { return d; })
 
-    d3.select(graph)
-        .append('p')
+    d3.select(filter)
+        .append('span')
         .append('button')
         .text('Filter Data')
         .on('click', onFilter);
 
-    d3.select(graph)
-        .append('p')
+    d3.select(filter)
+        .append('span')
         .append('button')
         .text('Reset Filter')
         .on('click', function() {
@@ -59,7 +62,7 @@ function start() {
         });
 
     function onFilter() {
-        selectValue = d3.select(graph).select('p').select('select').property('value')
+        selectValue = d3.select(filter).select('span').select('select').property('value')
         svg.selectAll('circle')
             .transition()
             .duration(1000)
@@ -80,35 +83,35 @@ function start() {
     var brushY = d3.scaleLinear().range([30, width]);
     var brushX = d3.scaleLinear().range([0, height]);
     var brush = d3.brush()
-        .extent([[0, 0], [width, height]]); 
-    var e = brush.extent(); 
+        .extent([[0, 0], [width, height]]);
+    var e = brush.extent();
 
 
     brush
-        .on("start", brushstart)   // when mousedown&dragging starts 
+        .on("start", brushstart)   // when mousedown&dragging starts
         .on("brush", brushing)          // when dragging
         .on("end", brushend);      // when mouseu
     function brushstart() {
-     
+
     }
 
 
     function brushing() {
         svg.selectAll('circle').classed("selected", function(d, i) {
-            
-        });
-    }		
 
-    
+        });
+    }
+
+
     function brushend() {
         var s = d3.event.selection;
         if (!s) {
-            
+
         } else {
             console.log(s[0][0]);
         }
         svg.selectAll('circle').classed("selected", function(d, i) {
-            
+
         });
     }
 
@@ -138,7 +141,7 @@ function start() {
                 return d.movie_title;
             })
             .entries(data)
-        
+
         svg.append("select")
             .selectAll("option")
             .data(nest)
@@ -150,7 +153,7 @@ function start() {
             .text(function (d) {
                 return d.key;
             })
-        
+
         svg.selectAll("circle").data(data).enter().append("circle")
             .attr("cx", function (d) {
                 return x(0);
@@ -221,5 +224,3 @@ function start() {
         g.selectAll(".tick text").attr("x", 4).attr("dy", -4);
     }
 }
-
-
