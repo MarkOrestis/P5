@@ -29,7 +29,6 @@ function start() {
         .range([height, 0]);
 
     var dropboxData = [2010, 2011, 2012, 2013, 2014, 2015, 2016];
-    var hallo = ["yo"];
     var select = d3.select(graph)
         .append('p')
         .append('select')
@@ -77,9 +76,14 @@ function start() {
             .style('opacity', 0);
     };
 
-    //brushing
+    //Brushing -------------------------------
+    var brushY = d3.scaleLinear().range([30, width]);
+    var brushX = d3.scaleLinear().range([0, height]);
     var brush = d3.brush()
-            .extent([[0, 0], [width, height]]);
+        .extent([[0, 0], [width, height]]); 
+    var e = brush.extent(); 
+
+
     brush
         .on("start", brushstart)   // when mousedown&dragging starts 
         .on("brush", brushing)          // when dragging
@@ -87,15 +91,42 @@ function start() {
     function brushstart() {
      
     }
+
+
     function brushing() {
-  
+        svg.selectAll('circle').classed("selected", function(d, i) {
+            
+        });
     }		
+
     
     function brushend() {
+        var s = d3.event.selection;
+        if (!s) {
+            
+        } else {
+            console.log(s[0][0]);
+        }
+        svg.selectAll('circle').classed("selected", function(d, i) {
+            
+        });
     }
+
+
     svg.append("g")
         .attr("class", "brush")
         .call(brush);
+
+
+
+
+
+
+
+
+
+
+
 
     d3.csv('movies.csv', d => {
         //to make budget a number
