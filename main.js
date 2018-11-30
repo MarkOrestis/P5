@@ -30,6 +30,8 @@ function start() {
         .range([height, 0]);
 
     var dropboxData = [2010, 2011, 2012, 2013, 2014, 2015, 2016];
+    var select = d3.select(graph)
+        .append('p')
     var select = d3.select(filter)
         .append('span')
         .append('select')
@@ -77,6 +79,58 @@ function start() {
             .style('opacity', 0);
     };
 
+    //Brushing -------------------------------
+    var brushY = d3.scaleLinear().range([30, width]);
+    var brushX = d3.scaleLinear().range([0, height]);
+    var brush = d3.brush()
+        .extent([[0, 0], [width, height]]);
+    var e = brush.extent();
+
+
+    brush
+        .on("start", brushstart)   // when mousedown&dragging starts
+        .on("brush", brushing)          // when dragging
+        .on("end", brushend);      // when mouseu
+    function brushstart() {
+
+    }
+
+
+    function brushing() {
+        svg.selectAll('circle').classed("selected", function(d, i) {
+
+        });
+    }
+
+
+    function brushend() {
+        var s = d3.event.selection;
+        if (!s) {
+
+        } else {
+            console.log(s[0][0]);
+        }
+        svg.selectAll('circle').classed("selected", function(d, i) {
+
+        });
+    }
+
+
+    svg.append("g")
+        .attr("class", "brush")
+        .call(brush);
+
+
+
+
+
+
+
+
+
+
+
+
     d3.csv('movies.csv', d => {
         //to make budget a number
         d.budget = +d.budget;
@@ -87,7 +141,7 @@ function start() {
                 return d.movie_title;
             })
             .entries(data)
-        
+
         svg.append("select")
             .selectAll("option")
             .data(nest)
@@ -99,7 +153,7 @@ function start() {
             .text(function (d) {
                 return d.key;
             })
-        
+
         svg.selectAll("circle").data(data).enter().append("circle")
             .attr("cx", function (d) {
                 return x(0);
@@ -170,5 +224,3 @@ function start() {
         g.selectAll(".tick text").attr("x", 4).attr("dy", -4);
     }
 }
-
-
