@@ -8,14 +8,7 @@ function start() {
     var width = 1050;
     var height = 1550;
     var r = d3.scaleLinear().domain([0, 10]).range([0, 7]);
-    var c = d3.scaleLinear(d3.schemeCategory20c).domain([0, 300000]);//.range([0, 20]);//.range([0,4]);
-    // (["Australia", "Bahamas", "Belgium", "Brazil", "Bulgaria", "Cambodia", "Canada", "Chile", "China",
-    //     "Czech Republic", "Denmark", "Egypt", "Finland", "France", "Georgia", "Germany", "Greece", "Hong Kong",
-    //     "Hungary", "Iceland", "India", "Indonesia", "Iran", "Ireland",
-    //     "Israel", "Italy", "Japan", "Kenya", "Kyrgyzstan", "Mexico", "New Zealand",
-    //     "Nigeeria", "Norway", "Official Site", "Pakistan", "Panama", "Poland",
-    //     "Romania", "Russia", "Slovenia", "South Africa", "Spain", "Sweden", "Switzerland",
-    //     "Taiwan", "Thailand", "UK", "USA"]);
+    var c = d3.scaleLinear(d3.schemeCategory20c).domain([0, 300000]);
     var svg = d3.select(graph)
         .append('svg')
         .attr('width', width)
@@ -26,8 +19,8 @@ function start() {
     //Right Side SVG
     var svg2 = d3.select(graph)
         .append('svg')
-        .attr('width', 200)
-        .attr('height', height);
+        .attr('width', 400)
+        .attr('height', height + 60);
     //Chart Legend
     svg2.append("rect")
         .attr("width", 150)
@@ -54,35 +47,100 @@ function start() {
         .attr("transform", "translate(70, 80)");
     svg2.append("circle")
         .attr("r", 10)
-        .attr("fill", "#7FDBFF")
+        .attr("fill", "#39CCCC")
         .attr("transform", "translate(50, 100)");
     svg2.append("text")
         .text(">1000")
         .attr("transform", "translate(70, 105)");
     svg2.append("circle")
         .attr("r", 10)
-        .attr("fill", "#39CCCC")
+        .attr("fill", "#7FDBFF")
         .attr("transform", "translate(50, 125)");
     svg2.append("text")
         .text(">100")
         .attr("transform", "translate(70, 130)");
+
+
+    //information after clicking
+    svg2.append("rect")
+        .attr("width", 300)
+        .attr("height", 150)
+        .attr("fill", "transparent")
+        .attr("stroke", "gray")
+        .attr("transform", "translate(20, 180)");
+
+    svg2.append("text")
+        .text("Movie:")
+        .attr("transform", "translate(30, 200)")
+
+    svg2.append("text")
+        .attr('id', "movie")
+        .text("")
+        .attr("transform", "translate(100, 200)")
+
+    svg2.append("text")
+        .text("Director:")
+        .attr("transform", "translate(30, 220)")
+
+    svg2.append("text")
+        .attr('id', "director")
+        .text("")
+        .attr("transform", "translate(100, 220)")
+
+
+    svg2.append("text")
+        .text("Actor 1:")
+        .attr("transform", "translate(30, 240)")
+
+    svg2.append("text")
+        .attr('id', "actor1")
+        .text("")
+        .attr("transform", "translate(100, 240)")
+
+    svg2.append("text")
+        .text("Actor 2:")
+        .attr("transform", "translate(30, 260)")
+
+    svg2.append("text")
+        .attr('id', "actor2")
+        .text("")
+        .attr("transform", "translate(100, 260)")
+
+    svg2.append("text")
+        .text("Actor 3:")
+        .attr("transform", "translate(30, 280)")
+
+    svg2.append("text")
+        .attr('id', "actor3")
+        .text("")
+        .attr("transform", "translate(100, 280)")
+
+    svg2.append("text")
+        .text("Genre:")
+        .attr("transform", "translate(30, 300)")
+
+    svg2.append("text")
+        .attr('id', "genre")
+        .text("")
+        .attr("transform", "translate(80, 300)")
     
+    svg2.append("text")
+        .text("Duration:")
+        .attr("transform", "translate(30, 320)")
 
-        
-        
-    // var y = d3.scaleTime()
-    //     .domain([new Date(2010), new Date(2016)])
-    //     .range([0, width]);
-    // var x = d3.scaleLinear()
-    //     .domain([0, 10])
-    //     .range([height, 0]);
+    svg2.append("text")
+        .attr('id', "duration")
+        .text("")
+        .attr("transform", "translate(100, 320)")
 
-    // var dropboxData = [2010, 2011, 2012, 2013, 2014, 2015, 2016];
+
+
+    //-----------------------------------------------------
 
     d3.select(filter)
         .append('span')
         .append('input')
-        .attr('class','search-box')
+        .attr('class', 'search-box')
         .attr('placeholder', 'search movie title')
         .attr('type', 'text')
         .attr('name', 'textInput')
@@ -93,40 +151,37 @@ function start() {
         .text('Filter Data')
         .on('click', onFilter);
 
-
-
-
     d3.select(filter)
         .append('span')
         .append('button')
         .text('Reset Filter')
-        .on('click', function() {
+        .on('click', function () {
             console.log(svg.selectAll("input[name='mode']:checked"));
             svg.selectAll('circle')
                 .transition()
-                .duration(function(d) {
+                .duration(function (d) {
                     return Math.random() * 1000;
                 })
                 .style('opacity', 1);
         });
 
-    d3.selectAll("input[name='mode']").on('change', function(d) {
+    d3.selectAll("input[name='mode']").on('change', function (d) {
         var valueRadioButton = this.value;
         console.log(valueRadioButton);
         svg.selectAll('circle')
-        .transition()
-        .duration(1000)
-        .style('opacity', 1);
+            .transition()
+            .duration(1000)
+            .style('opacity', 1);
 
         svg.selectAll('circle')
-            .filter(function(d) {
+            .filter(function (d) {
                 if (valueRadioButton == 2009) {
                     return d.title_year == valueRadioButton;
                 }
                 return d.title_year != valueRadioButton
             })
             .transition()
-            .duration(function(d) {
+            .duration(function (d) {
                 return Math.random() * 1000;
             })
             .style('opacity', 0);
@@ -140,13 +195,13 @@ function start() {
             .style('opacity', 1);
 
         svg.selectAll('circle')
-            .filter(function(d) {
+            .filter(function (d) {
                 if (!(d.movie_title.toLowerCase().includes(searchValue.toLowerCase()))) {
                     return d.movie_title;
                 }
             })
             .transition()
-            .duration(function(d) {
+            .duration(function (d) {
                 return Math.random() * 1000;
             })
             .style('opacity', 0);
@@ -190,16 +245,16 @@ function start() {
             .style("fill", function (d) {
                 // console.log(d.country);
                 if (d.movie_facebook_likes <= 1000)
-                return "#39CCCC";
+                    return "#7FDBFF";
                 if (d.movie_facebook_likes <= 10000 && d.movie_facebook_likes >= 1000)
-                return "#7FDBFF";
+                    return "#39CCCC";
                 if (d.movie_facebook_likes <= 100000 && d.movie_facebook_likes >= 10000)
-                return "#0074D9";
+                    return "#0074D9";
                 if (d.movie_facebook_likes <= 1000000 && d.movie_facebook_likes >= 100000)
-                return "#0000FF";
+                    return "#0000FF";
                 // return c(d.country);
             })
-            .attr("transform", "translate(0," + "50" + ")")
+            .attr("transform", "translate(6, 20)")
             .append("title")
             .text(function (d) {
                 return d.movie_title;
@@ -215,16 +270,18 @@ function start() {
             })
             .attr("r", function (d) {
                 return r(5);
-            }).on("end", (d,i) => {
+            }).on("end", (d, i) => {
                 if (i == 1604) {
                     svg.selectAll("circle").on("click", (d, i) => {
                         barchart(d);
+                        detailedInfo(d);
                     })
                 }
 
             })
 
     });
+
 
     //Bottom 2nd Visual SVG
     var bsvg = d3.select(barChart)
@@ -325,12 +382,22 @@ function start() {
     function clear() {
         d3.selectAll("bsvg > *").remove();
     }
-    g = svg.append("g").attr("transform", "translate(" + (margin.left - 6) + "," + (margin.top + 20) + ")");
+//     g = svg.append("g").attr("transform", "translate(" + (margin.left - 6) + "," + (margin.top + 20) + ")");
+    function detailedInfo(d) {
+        d3.select("#movie").text(d.movie_title);
+        d3.select("#director").text(d.director_name);
+        d3.select("#actor1").text(d.actor_1_name);
+        d3.select("#actor2").text(d.actor_2_name);
+        d3.select("#actor3").text(d.actor_3_name);
+        d3.select("#genre").text(d.genres);
+        d3.select("#duration").text(d.duration + " minutes");
+    }
+    g = svg.append("g").attr("transform", "translate(40, 20)");
     var formatNumber = d3.format(".1f");
 
     var x = d3.scaleLinear()
-        .domain([0, 10])
-        .range([0, width / 1.19]);
+        .domain([1, 10])
+        .range([0, width]);
 
     var y = d3.scaleLinear()
         .domain([0, 280000000])
@@ -343,6 +410,18 @@ function start() {
     var yAxis = d3.axisRight(y)
         .ticks(10)
         .tickSize(width);
+
+    svg.append('text')
+        .attr('class', 'labelAxis')
+        .attr('transform', 'translate(500, 750)')
+        .style('font-weight', 'bold')
+        .text('Imdb Rating');
+
+    svg.append('text')
+        .attr('class', 'labelAxis')
+        .attr('transform', 'translate(10, 400)rotate(-90)')
+        .style('font-weight', 'bold')
+        .text('Budget');
 
     g.append("g")
         .attr("class", "axis axis--x")
@@ -378,20 +457,20 @@ function start() {
         .on("start", brushstart)   // when mousedown&dragging starts
         .on("brush", brushing)          // when dragging
         .on("end", brushend);      // when mouseup
-        
+
     function brushstart() {
 
     }
 
 
     function brushing() {
-        svg.selectAll('circle').classed("selected", function(d, i) {
+        svg.selectAll('circle').classed("selected", function (d, i) {
 
         });
     }
     function idled() {
         idleTimeout = null;
-      }
+    }
     var x0 = [0, 10];
     var y0 = [0, 280000000];
     function brushend() {
@@ -408,8 +487,7 @@ function start() {
             y.domain([s[1][1], s[0][1]].map(y.invert, y));
             svg.select(".brush").call(brush.move, null);
         }
-        svg.selectAll("circle").classed("selected", function(d, i)
-        {
+        svg.selectAll("circle").classed("selected", function (d, i) {
 
             if (s) {
 
@@ -428,15 +506,15 @@ function start() {
         svg.select(".axis--x").transition(t).call(xAxis).call(customXAxis);
         svg.select(".axis--y").transition(t).call(yAxis).call(customYAxis);
         svg.selectAll("circle").transition(t)
-        .attr("cx", function (d) {
-            return x(+d.imdb_score + (margin.left / 100));
-        })
-        .attr("cy", function (d) {
-            return y(+d.budget);
-        });
-    //         .attr("cx", function(d) { return x(d[0]); })
-    //         .attr("cy", function(d) { return y(d[1]); });
-      
+            .attr("cx", function (d) {
+                return x(+d.imdb_score + (margin.left / 100));
+            })
+            .attr("cy", function (d) {
+                return y(+d.budget);
+            });
+        //         .attr("cx", function(d) { return x(d[0]); })
+        //         .attr("cy", function(d) { return y(d[1]); });
+
     }
 
     svg.append("g")
@@ -446,6 +524,6 @@ function start() {
 
 
     //Legend
-    
+
 
 }
