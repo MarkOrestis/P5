@@ -125,13 +125,13 @@ function start() {
         .attr("transform", "translate(80, 300)")
     
     svg2.append("text")
-        .text("Duration:")
+        .text("Imdb Rating:")
         .attr("transform", "translate(30, 320)")
 
     svg2.append("text")
-        .attr('id', "duration")
+        .attr('id', "imdb")
         .text("")
-        .attr("transform", "translate(100, 320)")
+        .attr("transform", "translate(120, 320)")
 
 
     //-----------------------------------------------------
@@ -287,7 +287,7 @@ function start() {
         d3.select("#actor2").text(d.actor_2_name);
         d3.select("#actor3").text(d.actor_3_name);
         d3.select("#genre").text(d.genres);
-        d3.select("#duration").text(d.duration + " minutes");
+        d3.select("#imdb").text(d.imdb_score);
     }
 
 
