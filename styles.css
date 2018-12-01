@@ -45,8 +45,7 @@ body {
     fill: blue !important;
 }
 #chart3 {
-    /* align-content: right;
-    text-align: right;  */
+    color: #013ee6
 }
 #label {
     text-align: right;
@@ -63,4 +62,12 @@ background: #0074D9
 }
 .less1000000 {
 background: #0000FF
+}
+
+/* #moreinfo {
+    transform: translate(50, 100) !important;
+} */
+
+#genre {
+    overflow: hidden;
 }
