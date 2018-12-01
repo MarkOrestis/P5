@@ -235,6 +235,7 @@ function start() {
         bwidth = +bsvg.attr("width"),
         bheight = +bsvg.attr("height");
     
+
     var xb = d3.scaleLinear().range([0, bwidth]);
     var yb = d3.scaleBand().range([bheight, 0]);
     
@@ -243,18 +244,87 @@ function start() {
     xb.domain([0, 260000]);
     bg.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(70," + (bheight - 47) + ")")
+        .attr("transform", "translate(70," + (bheight - 60) + ")")
         .call(d3.axisBottom(xb).ticks(15));
-    function barchart(d) {
-        
-        yb.domain([d.actor_1_name, d.actor_2_name, d.actor_3_name, d.director_name]);
+    bg.append("g")
+        .append("text")
+        .text("Facebook Likes")
+        .attr("transform", "translate(" + (bwidth/2 - 20) + "," + (bheight - 30) + ")");
+        yb.domain(["Director", "Actor 1", "Actor 2", "Actor 3"])
+        // yb.domain([d.actor_1_name, d.actor_2_name, d.actor_3_name, d.director_name]);
         bg.append("g")
             .attr("class", "y axis")
-            .attr("transform", "translate(70," + "-30" + ")")
+            .attr("transform", "translate(70," + "-35" + ")")
             .call(d3.axisLeft(yb));
 
+    function barchart(d) {
+        console.log(d);
+        console.log(d.actor1_facebook_likes);
+        bsvg.selectAll("rect").remove();
+        var actor3color;
+        var actor2color;
+        var actor1color;
+        var directorcolor;
+        if (d.actor_3_facebook_likes <= 1000)
+                actor3color = "#39ccccc";
+        if (d.actor_3_facebook_likes <= 10000 && d.actor_3_facebook_likes >= 1000)
+                actor3color = "#7FDBFF";
+        if (d.actor_3_facebook_likes <= 100000 && d.actor_3_facebook_likes >= 10000)
+                actor3color = "#0074D9";
+        if (d.actor_3_facebook_likes <= 1000000 && d.actor_3_facebook_likes >= 100000)
+                actor3color = "#0000FF";
+        if (d.actor_2_facebook_likes <= 1000)
+                actor2color = "#39ccccc";
+        if (d.actor_2_facebook_likes <= 10000 && d.actor_2_facebook_likes >= 1000)
+                actor2color = "#7FDBFF";
+        if (d.actor_2_facebook_likes <= 100000 && d.actor_2_facebook_likes >= 10000)
+                actor2color = "#0074D9";
+        if (d.actor_2_facebook_likes <= 1000000 && d.actor_2_facebook_likes >= 100000)
+                actor2color = "#0000FF";
+        if (d.actor_1_facebook_likes <= 1000)
+                actor1color = "#39ccccc";
+        if (d.actor_1_facebook_likes <= 10000 && d.actor_1_facebook_likes >= 1000)
+                actor1color = "#7FDBFF";
+        if (d.actor_1_facebook_likes <= 100000 && d.actor_1_facebook_likes >= 10000)
+                actor1color = "#0074D9";
+        if (d.actor_1_facebook_likes <= 1000000 && d.actor_1_facebook_likes >= 100000)
+                actor1color = "#0000FF";
+        if (d.director_facebook_likes <= 1000)
+                directorcolor = "#39ccccc";
+        if (d.director_facebook_likes <= 10000 && d.director_facebook_likes >= 1000)
+                directorcolor = "#7FDBFF";
+        if (d.director_facebook_likes <= 100000 && d.director_facebook_likes >= 10000)
+                directorcolor = "#0074D9";
+        if (d.director_facebook_likes <= 1000000 && d.director_facebook_likes >= 100000)
+                directorcolor = "#0000FF";
+        bsvg.append("rect")
+            .attr("width", xb(d.actor_3_facebook_likes))
+            .attr("height", 50)
+            .attr("fill", actor3color)
+            .attr("stroke", "gray")
+            .attr("transform", "translate(100, 20)");
+        bsvg.append("rect")
+            .attr("width", xb(d.actor_2_facebook_likes))
+            .attr("height", 50)
+            .attr("fill", actor2color)
+            .attr("stroke", "gray")
+            .attr("transform", "translate(100, 100)");
+        bsvg.append("rect")
+            .attr("width", xb(d.actor_1_facebook_likes))
+            .attr("height", 50)
+            .attr("fill", actor1color)
+            .attr("stroke", "gray")
+            .attr("transform", "translate(100, 180)");
+        bsvg.append("rect")
+            .attr("width", xb(d.director_facebook_likes))
+            .attr("height", 50)
+            .attr("fill", directorcolor)
+            .attr("stroke", "gray")
+            .attr("transform", "translate(100, 260)");
     }
-
+    function clear() {
+        d3.selectAll("bsvg > *").remove();
+    }
     g = svg.append("g").attr("transform", "translate(" + (margin.left - 6) + "," + (margin.top + 20) + ")");
     var formatNumber = d3.format(".1f");
 
