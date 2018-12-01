@@ -203,8 +203,7 @@ function start() {
             .transition()
             .duration(function (d) {
                 return Math.random() * 1000;
-            })
-            .style('opacity', 0);
+            }).remove();
     };
     d3.csv('movies.csv', d => {
 
