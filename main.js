@@ -358,25 +358,25 @@ function start() {
             .attr("width", xb(d.actor_3_facebook_likes))
             .attr("height", 50)
             .attr("fill", actor3color)
-            .attr("stroke", "gray")
+            .attr("stroke", false)
             .attr("transform", "translate(100, 20)");
         bsvg.append("rect")
             .attr("width", xb(d.actor_2_facebook_likes))
             .attr("height", 50)
             .attr("fill", actor2color)
-            .attr("stroke", "gray")
+            .attr("stroke", false)
             .attr("transform", "translate(100, 100)");
         bsvg.append("rect")
             .attr("width", xb(d.actor_1_facebook_likes))
             .attr("height", 50)
             .attr("fill", actor1color)
-            .attr("stroke", "gray")
+            .attr("stroke", false)
             .attr("transform", "translate(100, 180)");
         bsvg.append("rect")
             .attr("width", xb(d.director_facebook_likes))
             .attr("height", 50)
             .attr("fill", directorcolor)
-            .attr("stroke", "gray")
+            .attr("stroke", false)
             .attr("transform", "translate(100, 260)");
     }
     function clear() {
