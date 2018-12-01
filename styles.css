@@ -32,6 +32,10 @@
     text-align: center;
 }
 
+#barChart {
+    text-align: center;
+}
+
 body {
     margin: 0px;
 }
@@ -64,10 +68,16 @@ background: #0074D9
 background: #0000FF
 }
 
-/* #moreinfo {
-    transform: translate(50, 100) !important;
-} */
-
-#genre {
-    overflow: hidden;
+.bar {
+	fill: #6F257F;
+}
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #D4D8DA;
+  stroke-width: 1px;
+  shape-rendering: crispEdges;
+}
+.x path {
+    display: none;
 }
