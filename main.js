@@ -214,7 +214,7 @@ function start() {
                 return y(+d.budget);
             })
             .attr("r", function (d) {
-                return r(10);
+                return r(5);
             }).on("end", (d,i) => {
                 if (i == 1604) {
                     svg.selectAll("circle").on("click", (d, i) => {
